@@ -35,7 +35,7 @@ public class UserDetails extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String CREATE_TABLE_QUERY = "CREATE TABLE " + TABLE_NAME + "("
-                + USER_NAME + " TEXT PRIMARY KEY," + AMOUNT + " INTEGER,"+DESCRIPTION+ " TEXT,"+CREATED_DATE+" date default CURRENT_DATE)";
+                + USER_NAME + " TEXT," + AMOUNT + " INTEGER,"+DESCRIPTION+ " TEXT,"+CREATED_DATE+" date default CURRENT_DATE)";
         db.execSQL(CREATE_TABLE_QUERY);
     }
 

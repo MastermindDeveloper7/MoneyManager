@@ -33,6 +33,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.developer.mastermind.database.NewAccounts;
+import com.developer.mastermind.database.UserDetails;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -102,7 +105,8 @@ public class MainActivity extends AppCompatActivity
                        String userName = inputName.getText().toString();
                         String amountData=amount.getText().toString();
                         String detailUser=details.getText().toString();
-                        Log.d("Userdeatails","inputName:"+inputName+"\namount : "+amountData+"details : "+detailUser);
+                        Log.d("Userdeatails","inputName:"+userName+"\namount : "+amountData+"details : "+detailUser);
+                        new MainActivity().addNewAccountantDatabase(userName,amountData,detailUser);
 
                     }
                 })
@@ -112,6 +116,20 @@ public class MainActivity extends AppCompatActivity
                     }
                 });
         builder.create().show();
+    }
+
+    public void addNewAccountantDatabase(String name, String amountString, String details)
+    {
+        NewAccounts newAccountDb = new NewAccounts(this);
+        Log.d("Object Created","Object Created");
+        int amount = Integer.parseInt(amountString);
+        long noOfRecords = newAccountDb.addUser(name,amount);
+        if (noOfRecords >= 1)
+            Toast.makeText(getApplicationContext(),"Record Inserted Successfully",Toast.LENGTH_LONG).show();
+        UserDetails userDetailsDb = new UserDetails(getApplicationContext());
+        noOfRecords = userDetailsDb.addRecord(name,amount,details);
+        if (noOfRecords >= 1)
+            Toast.makeText(getApplicationContext(),"Description Added",Toast.LENGTH_LONG).show();
     }
 
     @Override
