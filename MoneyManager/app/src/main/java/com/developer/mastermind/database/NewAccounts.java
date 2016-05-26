@@ -20,16 +20,8 @@ public class NewAccounts extends SQLiteOpenHelper{
     private static final String USER_NAME = "userName";
     private static final String TOTAL_AMOUNT = "totalAmount";
 
-
-
-
-<<<<<<< HEAD:MoneyManager/app/src/main/java/com/developer/mastermind/database/UserDatabase.java
-    public UserDatabase(Context context) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
-=======
     public NewAccounts(Context context) {
         super(context,DATABASE_NAME, null, 1);
->>>>>>> 923531e75cbda9465d98c9aecdaf87fe75ba81ce:MoneyManager/app/src/main/java/com/developer/mastermind/database/NewAccounts.java
     }
 
     @Override
@@ -93,8 +85,4 @@ public class NewAccounts extends SQLiteOpenHelper{
         db.close();
         return accountDetails;
     }
-
-
-
-
 }
