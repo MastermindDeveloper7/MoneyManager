@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -89,16 +90,20 @@ public class MainActivity extends AppCompatActivity
     {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         final LayoutInflater inflater = this.getLayoutInflater();
-        final View convertView = inflater.inflate(R.layout.new_account_dialog_layout,null);
-        builder.setView(inflater.inflate(R.layout.new_account_dialog_layout, null))
+        final View dialogView = inflater.inflate(R.layout.new_account_dialog_layout,null);
+        builder.setView(dialogView)
                 // Add action buttons
                 .setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-                      final EditText inputName = (EditText) convertView.findViewById(R.id.username);
-                        final EditText amount = (EditText) convertView.findViewById(R.id.amount);
-                        final EditText details = (EditText) convertView.findViewById(R.id.details);
-                        Toast.makeText(getApplicationContext(),inputName.getText().toString(),Toast.LENGTH_LONG).show();
+                      final EditText inputName = (EditText) dialogView.findViewById(R.id.username);
+                        final EditText amount = (EditText) dialogView.findViewById(R.id.amount);
+                        final EditText details = (EditText) dialogView.findViewById(R.id.details);
+                       String userName = inputName.getText().toString();
+                        String amountData=amount.getText().toString();
+                        String detailUser=details.getText().toString();
+                        Log.d("Userdeatails","inputName:"+inputName+"\namount : "+amountData+"details : "+detailUser);
+
                     }
                 })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {

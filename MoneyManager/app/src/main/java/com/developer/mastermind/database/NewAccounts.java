@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 /**
  * Created by Dhananjay on 5/9/2016.
  */
-public class UserDatabase extends SQLiteOpenHelper{
+public class NewAccounts extends SQLiteOpenHelper{
 
     private static String DATABASE_NAME="USERS.DB";
     private static  String TABLE_NAME="USERDATA";
@@ -16,7 +16,7 @@ public class UserDatabase extends SQLiteOpenHelper{
 
     private static String createTableQuery="Crete table " + TABLE_NAME + " ( " + USER_NAME_COLUMN + "text," + PASSWORD_COLUMN +"text );";
 
-    public UserDatabase(Context context) {
+    public NewAccounts(Context context) {
         super(context,DATABASE_NAME, null, 1);
     }
 
