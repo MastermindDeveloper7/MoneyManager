@@ -2,43 +2,36 @@ package com.developer.mastermind.moneymanager;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.View;
-import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
-
-import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.view.View;
-import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.developer.mastermind.database.NewAccounts;
 import com.developer.mastermind.database.UserDetails;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    ListView mainListView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,6 +57,24 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        initilizeMainListView();
+    }
+
+    private void initilizeMainListView() {
+
+        mainListView = (ListView) findViewById(R.id.mainContentList);
+        NewAccounts newAccountDb = new NewAccounts(getApplicationContext());
+        ArrayList<String> allUserDataList = newAccountDb.getAllUsers();
+        String[] allUsersDataStringArray = new String[allUserDataList.size()];
+        allUsersDataStringArray = allUserDataList.toArray(allUsersDataStringArray);
+        ArrayAdapter<String> listAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1 ,allUsersDataStringArray);
+
+        mainListView.setAdapter(listAdapter);
+    }
+
+    private void addNewAccount() {
+        Intent intent = new Intent(this,AddNewAccountant.class);
+        startActivity(intent);
     }
 
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -88,7 +99,7 @@ public class MainActivity extends AppCompatActivity
                 });
         return builder.create();
     }
-
+/*
     public void addNewAccount()
     {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -99,14 +110,13 @@ public class MainActivity extends AppCompatActivity
                 .setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-                      final EditText inputName = (EditText) dialogView.findViewById(R.id.username);
+                        final EditText inputName = (EditText) dialogView.findViewById(R.id.username);
                         final EditText amount = (EditText) dialogView.findViewById(R.id.amount);
                         final EditText details = (EditText) dialogView.findViewById(R.id.details);
-                       String userName = inputName.getText().toString();
+                        String userName = inputName.getText().toString();
                         String amountData=amount.getText().toString();
                         String detailUser=details.getText().toString();
                         Log.d("Userdeatails","inputName:"+userName+"\namount : "+amountData+"details : "+detailUser);
-                        new MainActivity().addNewAccountantDatabase(userName,amountData,detailUser);
 
                     }
                 })
@@ -116,22 +126,7 @@ public class MainActivity extends AppCompatActivity
                     }
                 });
         builder.create().show();
-    }
-
-    public void addNewAccountantDatabase(String name, String amountString, String details)
-    {
-        NewAccounts newAccountDb = new NewAccounts(this);
-        Log.d("Object Created","Object Created");
-        int amount = Integer.parseInt(amountString);
-        long noOfRecords = newAccountDb.addUser(name,amount);
-        if (noOfRecords >= 1)
-            Toast.makeText(getApplicationContext(),"Record Inserted Successfully",Toast.LENGTH_LONG).show();
-        UserDetails userDetailsDb = new UserDetails(getApplicationContext());
-        noOfRecords = userDetailsDb.addRecord(name,amount,details);
-        if (noOfRecords >= 1)
-            Toast.makeText(getApplicationContext(),"Description Added",Toast.LENGTH_LONG).show();
-    }
-
+    }*/
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
