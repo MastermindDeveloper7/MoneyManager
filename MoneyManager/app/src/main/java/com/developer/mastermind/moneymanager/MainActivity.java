@@ -23,6 +23,8 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.developer.mastermind.Util.CustomAdapter;
+import com.developer.mastermind.Util.ListModel;
 import com.developer.mastermind.database.NewAccounts;
 import com.developer.mastermind.database.UserDetails;
 
@@ -32,6 +34,9 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     ListView mainListView;
+    CustomAdapter adapter;
+    private ArrayList<ListModel> CustomListViewValuesArray = new ArrayList<ListModel>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +49,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 addNewAccount();
+                finish();
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
@@ -57,7 +63,10 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        initilizeMainListView();
+        //initilizeMainListView();
+        setListData();
+        adapter = new CustomAdapter(this,CustomListViewValuesArray);
+        mainListView.setAdapter(adapter);
     }
 
     private void initilizeMainListView() {
@@ -70,6 +79,27 @@ public class MainActivity extends AppCompatActivity
         ArrayAdapter<String> listAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1 ,allUsersDataStringArray);
 
         mainListView.setAdapter(listAdapter);
+    }
+
+    public void setListData()
+    {
+        mainListView = (ListView) findViewById(R.id.mainContentList);
+        NewAccounts newAccountDb = new NewAccounts(getApplicationContext());
+        ArrayList<String> allUserDataList = newAccountDb.getAllUsers();
+        String[] allUsersDataStringArray = new String[allUserDataList.size()];
+        allUsersDataStringArray = allUserDataList.toArray(allUsersDataStringArray);
+        //ArrayAdapter<String> listAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1 ,allUsersDataStringArray);
+
+
+        for (int i=0; i<allUserDataList.size()/2;i++)
+        {
+            final ListModel sched = new ListModel();
+            sched.setName(allUserDataList.get(i*2));
+            sched.setTotalAmount(allUserDataList.get(i*2+1));
+
+            CustomListViewValuesArray.add(sched);
+        }
+
     }
 
     private void addNewAccount() {
@@ -99,34 +129,13 @@ public class MainActivity extends AppCompatActivity
                 });
         return builder.create();
     }
-/*
-    public void addNewAccount()
-    {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        final LayoutInflater inflater = this.getLayoutInflater();
-        final View dialogView = inflater.inflate(R.layout.new_account_dialog_layout,null);
-        builder.setView(dialogView)
-                // Add action buttons
-                .setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-                        final EditText inputName = (EditText) dialogView.findViewById(R.id.username);
-                        final EditText amount = (EditText) dialogView.findViewById(R.id.amount);
-                        final EditText details = (EditText) dialogView.findViewById(R.id.details);
-                        String userName = inputName.getText().toString();
-                        String amountData=amount.getText().toString();
-                        String detailUser=details.getText().toString();
-                        Log.d("Userdeatails","inputName:"+userName+"\namount : "+amountData+"details : "+detailUser);
 
-                    }
-                })
-                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        //setListData();
+    }
 
-                    }
-                });
-        builder.create().show();
-    }*/
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
@@ -29,7 +30,16 @@ public class NewAccounts extends SQLiteOpenHelper{
 
         String CREATE_TABLE_QUERY = "CREATE TABLE " + TABLE_NAME + "("
                 + USER_NAME + " TEXT PRIMARY KEY," + TOTAL_AMOUNT + " INTEGER)";
-        db.execSQL(CREATE_TABLE_QUERY);
+
+        try {
+            //db.execSQL("CREATE TABLE USERDATA (userName text PRIMARY KEY, totalAmount INTEGER)");
+            db.execSQL(CREATE_TABLE_QUERY);
+            Log.d("Table created","Table created successfullt Userdata");
+        }
+        catch (SQLiteException e)
+        {
+            Log.d("Create Table ","Error to create table");
+        }
     }
 
     @Override
@@ -40,11 +50,22 @@ public class NewAccounts extends SQLiteOpenHelper{
 
     public long addUser  (String name, int amount)
     {
+        long numberOfRecords = 0;
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(USER_NAME, name);
         contentValues.put(TOTAL_AMOUNT, amount);
-        long numberOfRecords=db.insert(TABLE_NAME, null, contentValues);
+        try {
+            numberOfRecords = db.insert(TABLE_NAME, null, contentValues);
+        }
+        catch (SQLiteException exception)
+        {
+            Log.e("Insert Exception ","Exception to insert record in UserData" + exception);
+            if (exception.getMessage().toString().contains("no such table")) {
+                Log.e("**Record Not inserted**", "Creating table " + TABLE_NAME + "because it doesn't exist!");
+            }
+        }
+        db.close();
         return numberOfRecords;
     }
 

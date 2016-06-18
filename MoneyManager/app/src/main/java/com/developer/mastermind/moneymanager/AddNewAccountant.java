@@ -1,5 +1,6 @@
 package com.developer.mastermind.moneymanager;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -69,5 +70,11 @@ public class AddNewAccountant extends AppCompatActivity implements View.OnClickL
 
         if (noOfRecords >= 1)
             Toast.makeText(getApplicationContext(),"Description Added",Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+        startActivity(new Intent(this,MainActivity.class));
     }
 }
