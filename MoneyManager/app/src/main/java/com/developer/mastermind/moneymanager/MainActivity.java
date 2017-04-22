@@ -18,7 +18,9 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -31,10 +33,11 @@ import com.developer.mastermind.database.UserDetails;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener ,AdapterView.OnItemClickListener{
 
     ListView mainListView;
     CustomAdapter adapter;
+    Button updateData;
     private ArrayList<ListModel> CustomListViewValuesArray = new ArrayList<ListModel>();
 
     @Override
@@ -55,6 +58,7 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -67,6 +71,7 @@ public class MainActivity extends AppCompatActivity
         setListData();
         adapter = new CustomAdapter(this,CustomListViewValuesArray);
         mainListView.setAdapter(adapter);
+        mainListView.setOnItemClickListener(this);
     }
 
     private void initilizeMainListView() {
@@ -84,6 +89,8 @@ public class MainActivity extends AppCompatActivity
     public void setListData()
     {
         mainListView = (ListView) findViewById(R.id.mainContentList);
+        //updateData = (Button) mainListView.findViewById(R.id.add);
+        //updateData.setOnClickListener(this);
         NewAccounts newAccountDb = new NewAccounts(getApplicationContext());
         ArrayList<String> allUserDataList = newAccountDb.getAllUsers();
         String[] allUsersDataStringArray = new String[allUserDataList.size()];
@@ -191,5 +198,17 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void onClick(View v) {
+
+        Toast.makeText(getApplicationContext(),"Updating",Toast.LENGTH_LONG).show();
+
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Toast.makeText(getApplicationContext(),"ItemTest : "+ id,Toast.LENGTH_LONG).show();
     }
 }
